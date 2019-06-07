@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class Grid {
     private GridPane gridPane;
-    //private GridCell [][]gameBoard;
     private ArrayList<ArrayList<GridCell>> gameBoard;
     private ArrayList<Ship> ships;
 

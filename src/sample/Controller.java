@@ -1,13 +1,10 @@
 package sample;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -79,6 +76,9 @@ public class Controller implements Initializable {
         //initialize(player2DisplayBoard, player2Grid);
 
         installStartButton(startButton);
+        installAboutButton(aboutButton);
+
+        setDisablePlayer2Ships(true);
 
         installShipListeners(ship1_p1);
         installShipListeners(ship2_p1);
@@ -394,6 +394,8 @@ public class Controller implements Initializable {
             System.out.println(ok[3]);*/
 
             player1Grid.addShip(ship);
+            r.setVisible(false);
+            setDisablePlayer2Ships(false);
         }
     }
 
@@ -404,7 +406,7 @@ public class Controller implements Initializable {
         int shipHeight;
         int shipWidth;
 
-        for (int i = 1; i < 8; i++)  {
+        for (int i = 1; i <= 8; i++)  {
             switch (i) {
                 case 1:
                     r = ship1_p2;
@@ -453,17 +455,26 @@ public class Controller implements Initializable {
             System.out.print(" ");
             System.out.println(ok[3]);*/
 
-
             player2Grid.addShip(ship);
+            r.setVisible(false);
         }
     }
 
     private int[] getCellLocation(int x1, int y1, int x2, int y2) {
         int []rectangle = new int[4];
-        rectangle[0] = (x1 - 53) / cellSize;
-        rectangle[1] = (y1 - 28) / cellSize;
-        rectangle[2] = (x2 - 53) / cellSize;;
-        rectangle[3] = (y2 - 28) / cellSize;
+
+        if (x1 < 400) {
+            rectangle[0] = (x1 - 53) / cellSize;
+            rectangle[1] = (y1 - 28) / cellSize;
+            rectangle[2] = (x2 - 53) / cellSize;
+            rectangle[3] = (y2 - 28) / cellSize;
+        }
+        else {
+            rectangle[0] = (x1 - 447) / cellSize;
+            rectangle[1] = (y1 - 28) / cellSize;
+            rectangle[2] = (x2 - 447) / cellSize;
+            rectangle[3] = (y2 - 28) / cellSize;
+        }
 
         return rectangle;
     }
@@ -471,4 +482,21 @@ public class Controller implements Initializable {
     private void installStartButton(Button button) {
         button.setOnAction(actionEvent -> placePlayer1Ships());
     }
+
+
+    private void installAboutButton(Button button) {
+        button.setOnAction(actionEvent -> placePlayer2Ships());
+    }
+
+    private void setDisablePlayer2Ships(boolean set) {
+        ship1_p2.setDisable(set);
+        ship2_p2.setDisable(set);
+        ship3_p2.setDisable(set);
+        ship4_p2.setDisable(set);
+        ship5_p2.setDisable(set);
+        ship6_p2.setDisable(set);
+        ship7_p2.setDisable(set);
+        ship8_p2.setDisable(set);
+    }
+
 }
