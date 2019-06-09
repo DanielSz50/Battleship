@@ -132,10 +132,6 @@ public class Grid {
         return this.gridPane;
     }
 
-    public ArrayList<ArrayList<GridCell>> getGameBoard() {
-        return gameBoard;
-    }
-
     boolean isGameOver() {
         return gameOver;
     }

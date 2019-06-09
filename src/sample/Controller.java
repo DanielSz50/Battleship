@@ -376,41 +376,13 @@ public class Controller implements Initializable {
 
 
     private void placePlayer1Ships() {
-
         Rectangle r;
-        Ship ship;
-        int shipHeight;
-        int shipWidth;
 
-        for (int i = 1; i <= 8; i++)  {
-            switch (i) {
-                case 1:
-                    r = ship1_p1;
-                    break;
-                case 2:
-                    r = ship2_p1;
-                    break;
-                case 3:
-                    r = ship3_p1;
-                    break;
-                case 4:
-                    r = ship4_p1;
-                    break;
-                case 5:
-                    r = ship5_p1;
-                    break;
-                case 6:
-                    r = ship6_p1;
-                    break;
-                case 7:
-                    r = ship7_p1;
-                    break;
-                case 8:
-                    r = ship8_p1;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + i);
-            }
+        for (int i = 0; i < 8; i++) {
+            r = rectangleShips.get(i);
+            Ship ship;
+            int shipHeight;
+            int shipWidth;
 
             if (r.getHeight() == initialShipWidth) {
                 shipHeight = initialShipWidth - 1;
@@ -426,45 +398,19 @@ public class Controller implements Initializable {
             player1Grid.addShip(ship);
             r.setVisible(false);
             setDisablePlayer2Ships(false);
+
+
         }
     }
 
     private void placePlayer2Ships() {
-
         Rectangle r;
-        Ship ship;
-        int shipHeight;
-        int shipWidth;
 
-        for (int i = 1; i <= 8; i++)  {
-            switch (i) {
-                case 1:
-                    r = ship1_p2;
-                    break;
-                case 2:
-                    r = ship2_p2;
-                    break;
-                case 3:
-                    r = ship3_p2;
-                    break;
-                case 4:
-                    r = ship4_p2;
-                    break;
-                case 5:
-                    r = ship5_p2;
-                    break;
-                case 6:
-                    r = ship6_p2;
-                    break;
-                case 7:
-                    r = ship7_p2;
-                    break;
-                case 8:
-                    r = ship8_p2;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + i);
-            }
+        for (int i = 0; i < 8; i++) {
+            r = rectangleShips.get(i + 8);
+            Ship ship;
+            int shipHeight;
+            int shipWidth;
 
             if (r.getHeight() == initialShipWidth) {
                 shipHeight = initialShipWidth - 1;
@@ -510,7 +456,7 @@ public class Controller implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Battleship alert");
             alert.setHeaderText(null);
-            alert.setContentText("Place your ships on the left board. \nPress OK button if you have finished");
+            alert.setContentText("Place your ships on the left board. \nPress OK button if you have finished. \nRight click on the ship to rotate.");
 
             alert.showAndWait();
 
@@ -537,7 +483,7 @@ public class Controller implements Initializable {
 
                 alert.setTitle("Battleship alert");
                 alert.setHeaderText(null);
-                alert.setContentText("Place your ships on the right board. \nPress OK button if you have finished");
+                alert.setContentText("Place your ships on the right board. \nPress OK button if you have finished. \nRight click on the ship to rotate.");
 
                 alert.showAndWait();
                 player1Button.setDisable(true);
@@ -581,47 +527,27 @@ public class Controller implements Initializable {
     }
 
     private void setVisiblePlayer1Ships(boolean set) {
-        ship1_p1.setVisible(set);
-        ship2_p1.setVisible(set);
-        ship3_p1.setVisible(set);
-        ship4_p1.setVisible(set);
-        ship5_p1.setVisible(set);
-        ship6_p1.setVisible(set);
-        ship7_p1.setVisible(set);
-        ship8_p1.setVisible(set);
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i).setVisible(set);
+        }
     }
 
     private void setVisiblePlayer2Ships(boolean set) {
-        ship1_p2.setVisible(set);
-        ship2_p2.setVisible(set);
-        ship3_p2.setVisible(set);
-        ship4_p2.setVisible(set);
-        ship5_p2.setVisible(set);
-        ship6_p2.setVisible(set);
-        ship7_p2.setVisible(set);
-        ship8_p2.setVisible(set);
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i+8).setVisible(set);
+        }
     }
 
     private void setDisablePlayer1Ships(boolean set) {
-        ship1_p1.setDisable(set);
-        ship2_p1.setDisable(set);
-        ship3_p1.setDisable(set);
-        ship4_p1.setDisable(set);
-        ship5_p1.setDisable(set);
-        ship6_p1.setDisable(set);
-        ship7_p1.setDisable(set);
-        ship8_p1.setDisable(set);
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i).setDisable(set);
+        }
     }
 
     private void setDisablePlayer2Ships(boolean set) {
-        ship1_p2.setDisable(set);
-        ship2_p2.setDisable(set);
-        ship3_p2.setDisable(set);
-        ship4_p2.setDisable(set);
-        ship5_p2.setDisable(set);
-        ship6_p2.setDisable(set);
-        ship7_p2.setDisable(set);
-        ship8_p2.setDisable(set);
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i+8).setDisable(set);
+        }
     }
 
     private void installGridCellListeners(Grid grid) {
