@@ -3,6 +3,7 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -14,16 +15,15 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    private int cellSize = 30;
+    private int layoutReset;
     private Grid player1Grid;
     private Grid player2Grid;
-    private boolean shipClick = false;
-    private Rectangle selectedShip;
+    private int cellSize = 30;
 
     @FXML
-    private Button startButton;
+    private Button player1Button;
     @FXML
-    private Button aboutButton;
+    private Button player2Button;
     @FXML
     private GridPane player1DisplayBoard;
     @FXML
@@ -69,113 +69,68 @@ public class Controller implements Initializable {
     }
 
     private void reset() {
+
         player1Grid.initGrid();
         player2Grid.initGrid();
 
-        //initialize(player1DisplayBoard, player1Grid);
-        //initialize(player2DisplayBoard, player2Grid);
+        installPlayer1Button(player1Button);
+        installPlayer2Button(player2Button);
 
-        installStartButton(startButton);
-        installAboutButton(aboutButton);
-
-        setDisablePlayer2Ships(true);
-
+        layoutReset = 0;
+        resetShip(ship1_p1);
         installShipListeners(ship1_p1);
+        resetShip(ship2_p1);
         installShipListeners(ship2_p1);
+        resetShip(ship3_p1);
         installShipListeners(ship3_p1);
+        resetShip(ship4_p1);
         installShipListeners(ship4_p1);
+        resetShip(ship5_p1);
         installShipListeners(ship5_p1);
+        resetShip(ship6_p1);
         installShipListeners(ship6_p1);
+        resetShip(ship7_p1);
         installShipListeners(ship7_p1);
+        resetShip(ship8_p1);
         installShipListeners(ship8_p1);
 
-        installShipListeners(ship1_p2);
-        installShipListeners(ship2_p2);
-        installShipListeners(ship3_p2);
-        installShipListeners(ship4_p2);
-        installShipListeners(ship5_p2);
-        installShipListeners(ship6_p2);
-        installShipListeners(ship7_p2);
+        layoutReset = 394;
+        resetShip(ship8_p2);
         installShipListeners(ship8_p2);
+        resetShip(ship7_p2);
+        installShipListeners(ship7_p2);
+        resetShip(ship6_p2);
+        installShipListeners(ship6_p2);
+        resetShip(ship5_p2);
+        installShipListeners(ship5_p2);
+        resetShip(ship4_p2);
+        installShipListeners(ship4_p2);
+        resetShip(ship3_p2);
+        installShipListeners(ship3_p2);
+        resetShip(ship2_p2);
+        installShipListeners(ship2_p2);
+        resetShip(ship1_p2);
+        installShipListeners(ship1_p2);
+
+        setDisablePlayer1Ships(false);
+        setDisablePlayer2Ships(true);
+
+        setVisiblePlayer1Ships(true);
+        setVisiblePlayer2Ships(true);
+
+        player1DisplayBoard.setDisable(true);
+        player2DisplayBoard.setDisable(true);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Next three methods are not being used, they allow you to place ships by clicking instead of dragging//
-
-    // METHOD 1
-    private void initialize(GridPane gridPane, Grid grid) {
-        int numCols = 10 ;
-        int numRows = 10 ;
-
-        for (int i = 0 ; i < numCols ; i++) {
-            ColumnConstraints colConstraints = new ColumnConstraints();
-            colConstraints.setHgrow(Priority.SOMETIMES);
-            gridPane.getColumnConstraints().add(colConstraints);
+    private void resetShip(Rectangle ship) {
+        ship.setLayoutX(53 + layoutReset);
+        ship.setLayoutY(348);
+        if (ship.getWidth() != 20) {
+            ship.setHeight(ship.getWidth());
+            ship.setWidth(20);
         }
 
-        for (int i = 0 ; i < numRows ; i++) {
-            RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setVgrow(Priority.SOMETIMES);
-            gridPane.getRowConstraints().add(rowConstraints);
-        }
-
-        for (int i = 0 ; i < numCols ; i++) {
-            for (int j = 0; j < numRows; j++) {
-                addPane(i, j, gridPane, grid);
-            }
-        }
-    }
-
-    // METHOD 2
-    private void addPane(int colIndex, int rowIndex, GridPane gridPane, Grid grid) {
-        Rectangle ok = (Rectangle) grid.getNode(colIndex, rowIndex);
-
-        Pane pane = new Pane();
-        pane.setOnMouseClicked(e -> {
-            System.out.printf("Mouse enetered cell [%d, %d]%n", colIndex, rowIndex);
-            if (shipClick) {
-
-                int updatedLayoutX;
-                if (selectedShip.getLayoutX() > 400) {
-                    updatedLayoutX = colIndex * cellSize + 447 + 5;
-                }
-                else {
-                    updatedLayoutX = colIndex * cellSize + 53 + 5;
-                }
-
-                selectedShip.setLayoutX(updatedLayoutX);
-                selectedShip.setLayoutY(rowIndex * cellSize + 28);
-                shipClick = false;
-
-                ok.setFill(Color.BLACK);
-            }
-        });
-
-        pane.setOnMouseEntered(mouseEvent -> {
-            if (shipClick) {
-                ok.setFill(Color.GREEN);
-
-            }
-        });
-
-        pane.setOnMouseExited(mouseEvent -> {
-            if (shipClick) {
-                ok.setFill(Color.BLACK);
-            }
-        });
-
-        gridPane.add(pane, colIndex, rowIndex);
-    }
-
-    // METHOD 3
-    private void installShip1Listeners(Rectangle ship) {
-
-        ship.setOnMouseClicked(mouseEvent -> {
-            selectedShip = ship;
-            shipClick = true;
-        });
-
-        ship.setOnMouseEntered(mouseEvent -> ship.setCursor(Cursor.HAND));
+        layoutReset += 40;
     }
 
     class Delta {
@@ -192,9 +147,7 @@ public class Controller implements Initializable {
             player = 2;
         }
 
-        int shipLayoutX = (int) ship.getLayoutX();
         int shipHeight = (int) ship.getHeight();
-        int shipType = shipHeight / cellSize;
         final Delta dragDelta = new Delta();
 
         ship.setOnMousePressed(mouseEvent -> {
@@ -382,7 +335,7 @@ public class Controller implements Initializable {
                 shipHeight = (int) r.getHeight() - 1;
             }
 
-            int []ok = getCellLocation((int) r.getLayoutX(), (int) r.getLayoutY(), (int) r.getLayoutX() + shipWidth, (int) r.getLayoutY() + shipHeight);
+            int []ok = layoutToGridCell((int) r.getLayoutX(), (int) r.getLayoutY(), (int) r.getLayoutX() + shipWidth, (int) r.getLayoutY() + shipHeight);
             ship = new Ship(ok[0], ok[1], ok[2], ok[3]);
 
             /*System.out.print(ok[0]);
@@ -444,7 +397,7 @@ public class Controller implements Initializable {
                 shipHeight = (int) r.getHeight() - 1;
             }
 
-            int []ok = getCellLocation((int) r.getLayoutX(), (int) r.getLayoutY(), (int) r.getLayoutX() + shipWidth, (int) r.getLayoutY() + shipHeight);
+            int []ok = layoutToGridCell((int) r.getLayoutX(), (int) r.getLayoutY(), (int) r.getLayoutX() + shipWidth, (int) r.getLayoutY() + shipHeight);
             ship = new Ship(ok[0], ok[1], ok[2], ok[3]);
 
             /*System.out.print(ok[0]);
@@ -457,10 +410,14 @@ public class Controller implements Initializable {
 
             player2Grid.addShip(ship);
             r.setVisible(false);
+            player1DisplayBoard.setDisable(false);
+
+            installGridCellListeners1(player1Grid);
+            installGridCellListeners1(player2Grid);
         }
     }
 
-    private int[] getCellLocation(int x1, int y1, int x2, int y2) {
+    private int[] layoutToGridCell(int x1, int y1, int x2, int y2) {
         int []rectangle = new int[4];
 
         if (x1 < 400) {
@@ -479,13 +436,46 @@ public class Controller implements Initializable {
         return rectangle;
     }
 
-    private void installStartButton(Button button) {
+    private void installPlayer1Button(Button button) {
         button.setOnAction(actionEvent -> placePlayer1Ships());
     }
 
 
-    private void installAboutButton(Button button) {
+    private void installPlayer2Button(Button button) {
         button.setOnAction(actionEvent -> placePlayer2Ships());
+    }
+
+    private void setVisiblePlayer1Ships(boolean set) {
+        ship1_p1.setVisible(set);
+        ship2_p1.setVisible(set);
+        ship3_p1.setVisible(set);
+        ship4_p1.setVisible(set);
+        ship5_p1.setVisible(set);
+        ship6_p1.setVisible(set);
+        ship7_p1.setVisible(set);
+        ship8_p1.setVisible(set);
+    }
+
+    private void setVisiblePlayer2Ships(boolean set) {
+        ship1_p2.setVisible(set);
+        ship2_p2.setVisible(set);
+        ship3_p2.setVisible(set);
+        ship4_p2.setVisible(set);
+        ship5_p2.setVisible(set);
+        ship6_p2.setVisible(set);
+        ship7_p2.setVisible(set);
+        ship8_p2.setVisible(set);
+    }
+
+    private void setDisablePlayer1Ships(boolean set) {
+        ship1_p1.setDisable(set);
+        ship2_p1.setDisable(set);
+        ship3_p1.setDisable(set);
+        ship4_p1.setDisable(set);
+        ship5_p1.setDisable(set);
+        ship6_p1.setDisable(set);
+        ship7_p1.setDisable(set);
+        ship8_p1.setDisable(set);
     }
 
     private void setDisablePlayer2Ships(boolean set) {
@@ -499,4 +489,51 @@ public class Controller implements Initializable {
         ship8_p2.setDisable(set);
     }
 
+    private void installGridCellListeners1(Grid grid) {
+        final Color hitSetFill = Color.DARKORCHID;
+        final Color missSetFill = Color.DARKGRAY;
+        final Color destroyedSetFill = Color.DARKKHAKI;
+
+        for (Node node : grid.getGridPane().getChildren()) {
+            Rectangle rect = (Rectangle) node;
+
+            rect.setOnMouseClicked(e -> {
+
+                if (rect.getFill() != hitSetFill && rect.getFill() != missSetFill && rect.getFill() != destroyedSetFill) {
+                    Rectangle r = (Rectangle) e.getSource();
+
+                    int colIndex = GridPane.getColumnIndex(r);
+                    int rowIndex = GridPane.getRowIndex(r);
+
+                    if (grid.guess(colIndex, rowIndex) == false) {
+                        if (grid.getGridPane() == player1DisplayBoard) {
+                            player1DisplayBoard.setDisable(true);
+                            player2DisplayBoard.setDisable(false);
+                        } else {
+                            player1DisplayBoard.setDisable(false);
+                            player2DisplayBoard.setDisable(true);
+                        }
+                    }
+
+                    // TODO: RESET THE GAME
+                    if (grid.isGameOver()) {
+                        reset();
+                    }
+                }
+            });
+
+            rect.setOnMouseEntered(mouseEvent -> {
+                if (rect.getFill() != hitSetFill && rect.getFill() != missSetFill && rect.getFill() != destroyedSetFill) {
+                    rect.setFill(Color.GREEN);
+                }
+            });
+
+            rect.setOnMouseExited(mouseEvent -> {
+                if (rect.getFill() != hitSetFill && rect.getFill() != missSetFill && rect.getFill() != destroyedSetFill) {
+                    rect.setFill(Color.BLACK);
+                }
+            });
+        }
+
+    }
 }

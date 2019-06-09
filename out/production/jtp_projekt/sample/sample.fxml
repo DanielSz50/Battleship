@@ -266,8 +266,8 @@
             </rowConstraints>
         </GridPane>
         <Rectangle fx:id="ship1_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="53.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Button fx:id="startButton" layoutX="354.0" layoutY="462.0" mnemonicParsing="false" text="Start Game" />
-        <Button fx:id="aboutButton" layoutX="372.0" layoutY="423.0" mnemonicParsing="false" text="About" />
+        <Button fx:id="player1Button" layoutX="362.0" layoutY="423.0" mnemonicParsing="false" text="Player 1" />
+        <Button fx:id="player2Button" layoutX="362.0" layoutY="462.0" mnemonicParsing="false" text="Player 2" />
         <Rectangle fx:id="ship2_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="93.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
         <Rectangle fx:id="ship3_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="133.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
         <Rectangle fx:id="ship4_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="173.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />

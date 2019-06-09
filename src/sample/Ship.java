@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.scene.Node;
-
 public class Ship {
     private final int startX;
     private final int startY;
@@ -52,23 +50,8 @@ public class Ship {
         return endY;
     }
 
-    public int getHits() {
-        return hits;
-    }
-
-    public int getStamina() {
-        return stamina;
-    }
 
     public boolean isDestroyed() {
         return destroyed;
-    }
-
-    public void setHits(int hits) {
-        this.hits = hits;
-    }
-
-    public void setDestroyed(boolean destroyed) {
-        this.destroyed = destroyed;
     }
 }
