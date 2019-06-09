@@ -269,24 +269,24 @@
         </GridPane>
         <Button fx:id="player1Button" alignment="CENTER" disable="true" layoutX="382.0" layoutY="425.0" mnemonicParsing="false" text="OK" visible="false" />
         <Button fx:id="player2Button" alignment="CENTER" disable="true" layoutX="382.0" layoutY="425.0" mnemonicParsing="false" text="OK" visible="false" />
-        <Button fx:id="startButton" alignment="CENTER" layoutX="370.0" layoutY="425.0" mnemonicParsing="false" text="START" />
+        <Button fx:id="startButton" alignment="CENTER" layoutX="370.0" layoutY="427.0" mnemonicParsing="false" text="START" />
         <Button fx:id="exitButton" alignment="CENTER" layoutX="377.0" layoutY="468.0" mnemonicParsing="false" onMouseClicked="#handleExitButton" text="EXIT" />
-        <Rectangle fx:id="ship1_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="53.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship2_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="93.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship3_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="133.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship4_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="173.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship5_p1" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="213.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship6_p1" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="253.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship7_p1" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="293.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship8_p1" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="333.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship8_p2" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="447.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship7_p2" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="487.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship6_p2" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="527.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship5_p2" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="567.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship4_p2" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="607.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship3_p2" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="647.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship2_p2" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="687.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Rectangle fx:id="ship1_p2" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="727.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
+        <Rectangle fx:id="ship1_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="48.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship2_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="88.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship3_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="128.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship4_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="168.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship5_p1" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="208.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship6_p1" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="248.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship7_p1" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="288.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship8_p1" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="328.0" layoutY="349.0" pickOnBounds="true" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship8_p2" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="442.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship7_p2" arcHeight="5.0" arcWidth="5.0" height="60.0" layoutX="482.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship6_p2" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="522.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship5_p2" arcHeight="5.0" arcWidth="5.0" height="90.0" layoutX="562.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship4_p2" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="602.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship3_p2" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="642.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship2_p2" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="682.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
+        <Rectangle fx:id="ship1_p2" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="722.0" layoutY="349.0" stroke="WHITE" strokeType="INSIDE" width="30.0" />
         <Label fx:id="player1Label" alignment="CENTER" disable="true" layoutX="48.0" layoutY="351.0" prefHeight="69.0" prefWidth="306.0" text="Player 1" textFill="#d41c8de7" visible="false">
             <font>
                 <Font name="Noto Sans Mono Regular" size="41.0" />
