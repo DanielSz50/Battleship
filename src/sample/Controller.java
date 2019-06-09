@@ -4,11 +4,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +25,8 @@ public class Controller implements Initializable {
     private int cellSize = 30;
 
     @FXML
+    private Button startButton;
+    @FXML
     private Button player1Button;
     @FXML
     private Button player2Button;
@@ -28,6 +34,10 @@ public class Controller implements Initializable {
     private GridPane player1DisplayBoard;
     @FXML
     private GridPane player2DisplayBoard;
+    @FXML
+    private Label player1Label;
+    @FXML
+    private Label player2Label;
     @FXML
     private Rectangle ship1_p1;
     @FXML
@@ -73,6 +83,16 @@ public class Controller implements Initializable {
         player1Grid.initGrid();
         player2Grid.initGrid();
 
+        player1Label.setVisible(false);
+        player2Label.setVisible(false);
+
+        startButton.setDisable(false);
+        startButton.setVisible(true);
+
+        setDisablePlayer1Ships(true);
+        setDisablePlayer2Ships(true);
+
+        installStartButton(startButton);
         installPlayer1Button(player1Button);
         installPlayer2Button(player2Button);
 
@@ -111,9 +131,6 @@ public class Controller implements Initializable {
         installShipListeners(ship2_p2);
         resetShip(ship1_p2);
         installShipListeners(ship1_p2);
-
-        setDisablePlayer1Ships(false);
-        setDisablePlayer2Ships(true);
 
         setVisiblePlayer1Ships(true);
         setVisiblePlayer2Ships(true);
@@ -286,7 +303,6 @@ public class Controller implements Initializable {
             }
         });
 
-        //ship.setOnMouseReleased(mouseEvent -> ship.setCursor(Cursor.HAND));
         ship.setOnMouseEntered(mouseEvent -> ship.setCursor(Cursor.HAND));
     }
 
@@ -412,8 +428,8 @@ public class Controller implements Initializable {
             r.setVisible(false);
             player1DisplayBoard.setDisable(false);
 
-            installGridCellListeners1(player1Grid);
-            installGridCellListeners1(player2Grid);
+            installGridCellListeners(player1Grid);
+            installGridCellListeners(player2Grid);
         }
     }
 
@@ -436,13 +452,63 @@ public class Controller implements Initializable {
         return rectangle;
     }
 
+    private void installStartButton(Button button) {
+        button.setOnAction(actionEvent -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Battleship alert");
+            alert.setHeaderText(null);
+            alert.setContentText("Place your ships on the left board. \nPress OK button if you have finished");
+
+            alert.showAndWait();
+
+            setDisablePlayer1Ships(false);
+            startButton.setDisable(true);
+            startButton.setVisible(false);
+            player1Button.setDisable(false);
+            player1Button.setVisible(true);
+        });
+    }
+
+    @FXML
+    private void handleExitButton(InputEvent e) {
+        final Node source = (Node) e.getSource();
+        final Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
+
     private void installPlayer1Button(Button button) {
-        button.setOnAction(actionEvent -> placePlayer1Ships());
+        button.setOnAction(actionEvent -> {
+            placePlayer1Ships();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Battleship alert");
+            alert.setHeaderText(null);
+            alert.setContentText("Place your ships on the right board. \nPress OK button if you have finished");
+
+            alert.showAndWait();
+            player1Button.setDisable(true);
+            player1Button.setVisible(false);
+            player2Button.setDisable(false);
+            player2Button.setVisible(true);
+        });
     }
 
 
     private void installPlayer2Button(Button button) {
-        button.setOnAction(actionEvent -> placePlayer2Ships());
+        button.setOnAction(actionEvent -> {
+            placePlayer2Ships();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Battleship alert");
+            alert.setHeaderText(null);
+            alert.setContentText("Okay! Player 1's turn.");
+
+            alert.showAndWait();
+            player1Label.setVisible(true);
+            player2Label.setVisible(true);
+            player2Button.setDisable(true);
+            player2Button.setVisible(false);
+        });
     }
 
     private void setVisiblePlayer1Ships(boolean set) {
@@ -489,7 +555,7 @@ public class Controller implements Initializable {
         ship8_p2.setDisable(set);
     }
 
-    private void installGridCellListeners1(Grid grid) {
+    private void installGridCellListeners(Grid grid) {
         final Color hitSetFill = Color.DARKORCHID;
         final Color missSetFill = Color.DARKGRAY;
         final Color destroyedSetFill = Color.DARKKHAKI;
@@ -515,8 +581,19 @@ public class Controller implements Initializable {
                         }
                     }
 
-                    // TODO: RESET THE GAME
                     if (grid.isGameOver()) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Battleship alert");
+                        alert.setHeaderText(null);
+
+                        if (grid.getGridPane() == player1DisplayBoard) {
+                            alert.setContentText("The Player 2 won!");
+                        }
+                        else {
+                            alert.setContentText("The Player 1 won!");
+                        }
+
+                        alert.showAndWait();
                         reset();
                     }
                 }
@@ -534,6 +611,5 @@ public class Controller implements Initializable {
                 }
             });
         }
-
     }
 }

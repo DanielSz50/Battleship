@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
@@ -265,9 +267,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
+        <Button fx:id="player1Button" alignment="CENTER" disable="true" layoutX="382.0" layoutY="425.0" mnemonicParsing="false" text="OK" visible="false" />
+        <Button fx:id="player2Button" alignment="CENTER" disable="true" layoutX="382.0" layoutY="425.0" mnemonicParsing="false" text="OK" visible="false" />
+        <Button fx:id="startButton" alignment="CENTER" layoutX="370.0" layoutY="425.0" mnemonicParsing="false" text="START" />
+        <Button fx:id="exitButton" alignment="CENTER" layoutX="377.0" layoutY="468.0" mnemonicParsing="false" onMouseClicked="#handleExitButton" text="EXIT" />
         <Rectangle fx:id="ship1_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="53.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
-        <Button fx:id="player1Button" layoutX="362.0" layoutY="423.0" mnemonicParsing="false" text="Player 1" />
-        <Button fx:id="player2Button" layoutX="362.0" layoutY="462.0" mnemonicParsing="false" text="Player 2" />
         <Rectangle fx:id="ship2_p1" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="93.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
         <Rectangle fx:id="ship3_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="133.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
         <Rectangle fx:id="ship4_p1" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="173.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
@@ -283,5 +287,15 @@
         <Rectangle fx:id="ship3_p2" arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="647.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
         <Rectangle fx:id="ship2_p2" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="687.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
         <Rectangle fx:id="ship1_p2" arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="727.0" layoutY="348.0" stroke="WHITE" strokeType="INSIDE" width="20.0" />
+        <Label fx:id="player1Label" alignment="CENTER" disable="true" layoutX="48.0" layoutY="351.0" prefHeight="69.0" prefWidth="306.0" text="Player 1" textFill="#d41c8de7" visible="false">
+            <font>
+                <Font name="Noto Sans Mono Regular" size="41.0" />
+            </font>
+        </Label>
+        <Label fx:id="player2Label" alignment="CENTER" disable="true" layoutX="444.0" layoutY="351.0" prefHeight="69.0" prefWidth="306.0" text="Player 2" textFill="#018f8ff9" visible="false">
+            <font>
+                <Font name="Noto Sans Mono Regular" size="41.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>
