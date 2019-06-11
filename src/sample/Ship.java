@@ -1,6 +1,6 @@
 package sample;
 
-public class Ship {
+class Ship {
     private final int startX;
     private final int startY;
     private final int endX;
@@ -15,6 +15,7 @@ public class Ship {
         this.endX = endX;
         this.endY = endY;
 
+        // Calculate ship stamina
         if (endX - startX > endY - startY) {
             this.stamina = endX - startX + 1;
         }

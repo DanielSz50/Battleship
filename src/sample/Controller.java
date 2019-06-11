@@ -21,8 +21,8 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     private int initialShipWidth = 30;
-    private ArrayList<Rectangle> rectangleShips;
-    private int layoutReset;
+    private ArrayList<Rectangle> rectangleShips; // store ships in array for convenience
+    private int layoutReset; // useful for resetting ships position
     private Grid player1Grid;
     private Grid player2Grid;
     private int cellSize = 30;
@@ -85,22 +85,32 @@ public class Controller implements Initializable {
 
     private void reset() {
 
+        // Initialize grids for the players
         player1Grid.initGrid();
         player2Grid.initGrid();
 
+        // Hide labels until the game starts
         player1Label.setVisible(false);
         player2Label.setVisible(false);
 
+        // Enable start button
         startButton.setDisable(false);
         startButton.setVisible(true);
 
+        // Disable ships until the game starts
         setDisablePlayer1Ships(true);
         setDisablePlayer2Ships(true);
 
+        // Install buttons
         installStartButton(startButton);
         installPlayer1Button(player1Button);
         installPlayer2Button(player2Button);
 
+        // Install grid cell listeners
+        installGridCellListeners(player1Grid);
+        installGridCellListeners(player2Grid);
+
+        // Install ship listeners and reset layout
         layoutReset = 0;
         resetShipLayout(ship1_p1);
         installShipListeners(ship1_p1);
@@ -137,26 +147,28 @@ public class Controller implements Initializable {
         resetShipLayout(ship1_p2);
         installShipListeners(ship1_p2);
 
+        // Make sure ships are visible after resetting the game
         setVisiblePlayer1Ships(true);
         setVisiblePlayer2Ships(true);
 
+        // Disable boards until ships are placed
         player1DisplayBoard.setDisable(true);
         player2DisplayBoard.setDisable(true);
     }
 
     private void resetShipLayout(Rectangle ship) {
+        int shipSpacing = 40;
+
         ship.setLayoutX(48 + layoutReset);
         ship.setLayoutY(349);
+
+        // Rotate back the ship
         if (ship.getWidth() != initialShipWidth) {
             ship.setHeight(ship.getWidth());
             ship.setWidth(initialShipWidth);
         }
 
-        layoutReset += 40;
-    }
-
-    class Delta {
-        double x, y;
+        layoutReset += shipSpacing;
     }
 
     private void addShipsToArray() {
@@ -179,8 +191,18 @@ public class Controller implements Initializable {
         rectangleShips.add(ship8_p2);
     }
 
+    // Useful for tracking the ship drag
+    class Delta {
+        double x, y;
+    }
+
+    ///////////////////////
+    // INSTALL LISTENERS //
+    ///////////////////////
+
     private void installShipListeners(Rectangle ship) {
 
+        // Check which player's ship is being dragged
         int player;
         if (ship.getLayoutX() < 400) {
             player = 1;
@@ -192,6 +214,7 @@ public class Controller implements Initializable {
         int shipHeight = (int) ship.getHeight();
         final Delta dragDelta = new Delta();
 
+        // Track the ship movement here
         ship.setOnMousePressed(mouseEvent -> {
             dragDelta.x = ship.getLayoutX() - mouseEvent.getSceneX();
             dragDelta.y = ship.getLayoutY() - mouseEvent.getSceneY();
@@ -200,59 +223,45 @@ public class Controller implements Initializable {
 
         ship.setOnMouseDragged(mouseEvent -> {
 
-            int translate = 0;
-
+            // Do nothing if the player is trying to drag a ship with the right button since it's being used for rotating the ship
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 return;
             }
 
+            // translate variable is not useful now, but it helps if you decide to add ships with different width to the game
+            int translate = 0;
             if (ship.getWidth() == shipHeight) {
                 translate = (initialShipWidth - cellSize) / 2;
             }
 
             if (player == 1) {
 
+                // Calculate the row and the column for a new ship layout
                 int col = (int) (mouseEvent.getSceneX() + dragDelta.x - 42) / cellSize;
-                int x = col * cellSize + 53 - translate; // 53 = distance from grid to left border
+                double x = col * cellSize + 53 - translate; // 53 = distance from grid to left border
+
                 int row = (int) (mouseEvent.getSceneY() + dragDelta.y - shipHeight / 6) / cellSize;
-                int y = row * cellSize + 28 + translate; // 28 = distance from grid to top border
+                double y = row * cellSize + 28 + translate; // 28 = distance from grid to top border
 
                 ///////////////////////////////////////////////
                 /// HANDLE DRAGGING OUTSIDE THE GIVEN SPACE ///
-                if (ship.getHeight() == shipHeight) {
-                    if (x > 370) {
-                        x = 370;
-                    }
 
-                    if (x < 0) {
-                        x = 0;
-                    }
-
-                    if (y < 0) {
-                        y = 0;
-                    }
-
-                    if (y > 520 - shipHeight) {
-                        y = 520 - shipHeight;
-                    }
+                if (x > 400 - ship.getWidth()) {
+                    x = 400 - ship.getWidth();
                 }
-                else {
-                    if (x > 400 - shipHeight) {
-                        x = 400 - shipHeight;
-                    }
 
-                    if (x < 0) {
-                        x = 0;
-                    }
-
-                    if (y < 0) {
-                        y = 0;
-                    }
-
-                    if (y > 490) {
-                        y = 490;
-                    }
+                if (x < 0) {
+                    x = 0;
                 }
+
+                if (y < 0) {
+                    y = 0;
+                }
+
+                if (y > 520 - ship.getHeight()) {
+                    y = 520 - ship.getHeight();
+                }
+
                 // DONE //
                 /////////
 
@@ -261,47 +270,33 @@ public class Controller implements Initializable {
             }
 
             if (player == 2) {
+
+                // Calculate the row and the column for a new ship layout
                 int col = (int) (mouseEvent.getSceneX() + dragDelta.x - 440) / cellSize;
-                int x = col * cellSize + 447 - translate; // 447 = distance from grid to left border
+                double x = col * cellSize + 447 - translate; // 447 = distance from grid to left border
+
                 int row = (int) (mouseEvent.getSceneY() + dragDelta.y - shipHeight / 6) / cellSize;
-                int y = row * cellSize + 28 + translate; // 28 = distance from grid to top border
+                double y = row * cellSize + 28 + translate; // 28 = distance from grid to top border
 
                 ///////////////////////////////////////////////
                 /// HANDLE DRAGGING OUTSIDE THE GIVEN SPACE ///
-                if (ship.getHeight() == shipHeight) {
-                    if (x < 400) {
-                        x = 400;
-                    }
 
-                    if (x > 770) {
-                        x = 770;
-                    }
-
-                    if (y < 0) {
-                        y = 0;
-                    }
-
-                    if (y > 520 - shipHeight) {
-                        y = 520 - shipHeight;
-                    }
+                if (x < 400) {
+                    x = 400;
                 }
-                else {
-                    if (x < 400) {
-                        x = 400;
-                    }
 
-                    if (x > 800 - shipHeight) {
-                        x = 800 - shipHeight;
-                    }
-
-                    if (y < 0) {
-                        y = 0;
-                    }
-
-                    if (y > 490) {
-                        y = 490;
-                    }
+                if (x > 800 - ship.getWidth()) {
+                    x = 800 - ship.getWidth();
                 }
+
+                if (y < 0) {
+                    y = 0;
+                }
+
+                if (y > 520 - ship.getHeight()) {
+                    y = 520 - ship.getHeight();
+                }
+
                 // DONE //
                 /////////
 
@@ -310,6 +305,7 @@ public class Controller implements Initializable {
             }
         });
 
+        // Detect collision after the ship placement
         ship.setOnMouseReleased(mouseEvent -> {
             ArrayList<Integer> painted = new ArrayList<>();
 
@@ -335,6 +331,7 @@ public class Controller implements Initializable {
             painted.clear();
         });
 
+        // Rotate ship on left click by reversing its dimensions
         ship.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 if (ship.getHeight() == shipHeight) {
@@ -351,203 +348,34 @@ public class Controller implements Initializable {
                     ship.setLayoutY(ship.getLayoutY());
                 }
             }
+
+
+            // Detect collision after ship rotation
+            ArrayList<Integer> painted = new ArrayList<>();
+
+            for (int i = 0; i < 16; i++) {
+                for (int j = i + 1; j < 16; j++) {
+                    if (rectangleShips.get(i).getBoundsInParent().intersects(rectangleShips.get(j).getBoundsInParent())) {
+                        rectangleShips.get(i).setFill(Color.RED);
+                        rectangleShips.get(j).setFill(Color.RED);
+                        painted.add(i);
+                        painted.add(j);
+                        System.out.println("Collision Detected");
+                    }
+
+                }
+            }
+
+            for (int i = 0; i < 16; i++) {
+                if (!painted.contains(i)) {
+                    rectangleShips.get(i).setFill(Color.BLACK);
+                }
+            }
+
+            painted.clear();
         });
 
         ship.setOnMouseEntered(mouseEvent -> ship.setCursor(Cursor.HAND));
-    }
-
-    private boolean checkCollision() {
-        for (Rectangle r : rectangleShips) {
-            for (Rectangle ship : rectangleShips) {
-                if (ship.getBoundsInParent().intersects(r.getBoundsInParent())) {
-                    if (ship != r) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        for (Rectangle r : rectangleShips) {
-            r.setFill(Color.BLACK);
-        }
-
-        return false;
-    }
-
-
-    private void placePlayer1Ships() {
-        Rectangle r;
-
-        for (int i = 0; i < 8; i++) {
-            r = rectangleShips.get(i);
-            Ship ship;
-            int shipHeight;
-            int shipWidth;
-
-            if (r.getHeight() == initialShipWidth) {
-                shipHeight = initialShipWidth - 1;
-                shipWidth = (int) r.getWidth() - 1;
-            } else {
-                shipWidth = initialShipWidth - 1;
-                shipHeight = (int) r.getHeight() - 1;
-            }
-
-            int []ok = layoutToGridCell((int) r.getLayoutX(), (int) r.getLayoutY(), (int) r.getLayoutX() + shipWidth, (int) r.getLayoutY() + shipHeight);
-            ship = new Ship(ok[0], ok[1], ok[2], ok[3]);
-
-            player1Grid.addShip(ship);
-            r.setVisible(false);
-            setDisablePlayer2Ships(false);
-
-
-        }
-    }
-
-    private void placePlayer2Ships() {
-        Rectangle r;
-
-        for (int i = 0; i < 8; i++) {
-            r = rectangleShips.get(i + 8);
-            Ship ship;
-            int shipHeight;
-            int shipWidth;
-
-            if (r.getHeight() == initialShipWidth) {
-                shipHeight = initialShipWidth - 1;
-                shipWidth = (int) r.getWidth() - 1;
-            } else {
-                shipWidth = initialShipWidth - 1;
-                shipHeight = (int) r.getHeight() - 1;
-            }
-
-            int []ok = layoutToGridCell((int) r.getLayoutX(), (int) r.getLayoutY(), (int) r.getLayoutX() + shipWidth, (int) r.getLayoutY() + shipHeight);
-            ship = new Ship(ok[0], ok[1], ok[2], ok[3]);
-
-            player2Grid.addShip(ship);
-            r.setVisible(false);
-            player1DisplayBoard.setDisable(false);
-
-            installGridCellListeners(player1Grid);
-            installGridCellListeners(player2Grid);
-        }
-    }
-
-    private int[] layoutToGridCell(int x1, int y1, int x2, int y2) {
-        int []rectangle = new int[4];
-
-        if (x1 < 400) {
-            rectangle[0] = (x1 - 53) / cellSize;
-            rectangle[1] = (y1 - 28) / cellSize;
-            rectangle[2] = (x2 - 53) / cellSize;
-            rectangle[3] = (y2 - 28) / cellSize;
-        }
-        else {
-            rectangle[0] = (x1 - 447) / cellSize;
-            rectangle[1] = (y1 - 28) / cellSize;
-            rectangle[2] = (x2 - 447) / cellSize;
-            rectangle[3] = (y2 - 28) / cellSize;
-        }
-
-        return rectangle;
-    }
-
-    private void installStartButton(Button button) {
-        button.setOnAction(actionEvent -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Battleship alert");
-            alert.setHeaderText(null);
-            alert.setContentText("Place your ships on the left board. \nPress OK button if you have finished. \nRight click on the ship to rotate.");
-
-            alert.showAndWait();
-
-            setDisablePlayer1Ships(false);
-            startButton.setDisable(true);
-            startButton.setVisible(false);
-            player1Button.setDisable(false);
-            player1Button.setVisible(true);
-        });
-    }
-
-    @FXML
-    private void handleExitButton(InputEvent e) {
-        final Node source = (Node) e.getSource();
-        final Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-    }
-
-    private void installPlayer1Button(Button button) {
-        button.setOnAction(actionEvent -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            if (!checkCollision()) {
-                placePlayer1Ships();
-
-                alert.setTitle("Battleship alert");
-                alert.setHeaderText(null);
-                alert.setContentText("Place your ships on the right board. \nPress OK button if you have finished. \nRight click on the ship to rotate.");
-
-                alert.showAndWait();
-                player1Button.setDisable(true);
-                player1Button.setVisible(false);
-                player2Button.setDisable(false);
-                player2Button.setVisible(true);
-            }
-            else {
-                alert.setTitle("Battleship alert");
-                alert.setHeaderText(null);
-                alert.setContentText("You need to move the ships highlighted in red!");
-                alert.showAndWait();
-            }
-        });
-    }
-
-
-    private void installPlayer2Button(Button button) {
-        button.setOnAction(actionEvent -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            if (!checkCollision()) {
-                placePlayer2Ships();
-
-                alert.setTitle("Battleship alert");
-                alert.setHeaderText(null);
-                alert.setContentText("Okay! Player 1's turn.");
-
-                alert.showAndWait();
-                player1Label.setVisible(true);
-                player2Label.setVisible(true);
-                player2Button.setDisable(true);
-                player2Button.setVisible(false);
-            }
-            else {
-                alert.setTitle("Battleship alert");
-                alert.setHeaderText(null);
-                alert.setContentText("You need to move the ships highlighted in red!");
-                alert.showAndWait();
-            }
-        });
-    }
-
-    private void setVisiblePlayer1Ships(boolean set) {
-        for (int i = 0; i < 8; i++) {
-            rectangleShips.get(i).setVisible(set);
-        }
-    }
-
-    private void setVisiblePlayer2Ships(boolean set) {
-        for (int i = 0; i < 8; i++) {
-            rectangleShips.get(i+8).setVisible(set);
-        }
-    }
-
-    private void setDisablePlayer1Ships(boolean set) {
-        for (int i = 0; i < 8; i++) {
-            rectangleShips.get(i).setDisable(set);
-        }
-    }
-
-    private void setDisablePlayer2Ships(boolean set) {
-        for (int i = 0; i < 8; i++) {
-            rectangleShips.get(i+8).setDisable(set);
-        }
     }
 
     private void installGridCellListeners(Grid grid) {
@@ -570,12 +398,14 @@ public class Controller implements Initializable {
                         if (grid.getGridPane() == player1DisplayBoard) {
                             player1DisplayBoard.setDisable(true);
                             player2DisplayBoard.setDisable(false);
-                        } else {
+                        }
+                        else {
                             player1DisplayBoard.setDisable(false);
                             player2DisplayBoard.setDisable(true);
                         }
                     }
 
+                    // Reset if the game is over
                     if (grid.isGameOver()) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Battleship alert");
@@ -594,6 +424,7 @@ public class Controller implements Initializable {
                 }
             });
 
+            // Highlight cell in green on mouse hover
             rect.setOnMouseEntered(mouseEvent -> {
                 if (rect.getFill() != hitSetFill && rect.getFill() != missSetFill && rect.getFill() != destroyedSetFill) {
                     rect.setFill(Color.GREEN);
@@ -605,6 +436,221 @@ public class Controller implements Initializable {
                     rect.setFill(Color.BLACK);
                 }
             });
+        }
+    }
+
+    ////////////////////////
+    // INSTALLING BUTTONS //
+    ////////////////////////
+
+    // Install button for starting the game
+    private void installStartButton(Button button) {
+        button.setOnAction(actionEvent -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Battleship alert");
+            alert.setHeaderText(null);
+            alert.setContentText("Place your ships on the left board. \nPress OK button if you have finished. \nRight click on the ship to rotate.");
+
+            alert.showAndWait();
+
+            setDisablePlayer1Ships(false);
+            startButton.setDisable(true);
+            startButton.setVisible(false);
+            player1Button.setDisable(false);
+            player1Button.setVisible(true);
+        });
+    }
+
+    // Install button that allows player 1 to set up his ships
+    private void installPlayer1Button(Button button) {
+        button.setOnAction(actionEvent -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            if (!checkCollision() && checkShipPlacement(player1Grid)) {
+                setupPlayer1Ships();
+
+                alert.setTitle("Battleship alert");
+                alert.setHeaderText(null);
+                alert.setContentText("Place your ships on the right board. \nPress OK button if you have finished. \nRight click on the ship to rotate.");
+
+                alert.showAndWait();
+                player1Button.setDisable(true);
+                player1Button.setVisible(false);
+                player2Button.setDisable(false);
+                player2Button.setVisible(true);
+            }
+            else {
+                alert.setTitle("Battleship alert");
+                alert.setHeaderText(null);
+                alert.setContentText("You need to move the ships highlighted in red or ships that are outside the board!");
+                alert.showAndWait();
+            }
+        });
+    }
+
+    // Install button that allows player 2 to set up his ships
+    private void installPlayer2Button(Button button) {
+        button.setOnAction(actionEvent -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            if (!checkCollision() && checkShipPlacement(player2Grid)) {
+                setupPlayer2Ships();
+
+                alert.setTitle("Battleship alert");
+                alert.setHeaderText(null);
+                alert.setContentText("Okay! Player 1's turn.");
+
+                alert.showAndWait();
+                player1Label.setVisible(true);
+                player2Label.setVisible(true);
+                player2Button.setDisable(true);
+                player2Button.setVisible(false);
+            }
+            else {
+                alert.setTitle("Battleship alert");
+                alert.setHeaderText(null);
+                alert.setContentText("You need to move the ships highlighted in red or ships that are outside the board!");
+                alert.showAndWait();
+            }
+        });
+    }
+
+    @FXML
+    private void handleExitButton(InputEvent e) {
+        final Node source = (Node) e.getSource();
+        final Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
+
+
+
+    // Setup ships placed by first player
+    private void setupPlayer1Ships() {
+        Rectangle r;
+        Ship ship;
+
+        for (int i = 0; i < 8; i++) {
+            r = rectangleShips.get(i);
+
+            int []ok = shipLayoutToGrid(r.getLayoutX(), r.getLayoutY(), r.getLayoutX() + r.getWidth() - 1, r.getLayoutY() + r.getHeight() - 1);
+            ship = new Ship(ok[0], ok[1], ok[2], ok[3]);
+
+            player1Grid.addShip(ship);
+        }
+
+        setVisiblePlayer1Ships(false);
+        setDisablePlayer2Ships(false);
+    }
+
+    // Setup ships placed by second player
+    private void setupPlayer2Ships() {
+        Rectangle r;
+        Ship ship;
+
+        for (int i = 0; i < 8; i++) {
+            r = rectangleShips.get(i + 8);
+
+            int []ok = shipLayoutToGrid(r.getLayoutX(), r.getLayoutY(), r.getLayoutX() + r.getWidth() - 1, r.getLayoutY() + r.getHeight() - 1);
+            ship = new Ship(ok[0], ok[1], ok[2], ok[3]);
+
+            player2Grid.addShip(ship);
+        }
+
+        setVisiblePlayer2Ships(false);
+        setDisablePlayer2Ships(true);
+
+        player1DisplayBoard.setDisable(false);
+    }
+
+    // Convert ship layout to the location on the grid
+    private int[] shipLayoutToGrid(double x1, double y1, double x2, double y2) {
+        int []rectangle = new int[4];
+
+        if (x1 < 400) {
+            rectangle[0] = (int) (x1 - 53) / cellSize;
+            rectangle[1] = (int) (y1 - 28) / cellSize;
+            rectangle[2] = (int) (x2 - 53) / cellSize;
+            rectangle[3] = (int) (y2 - 28) / cellSize;
+        }
+        else {
+            rectangle[0] = (int) (x1 - 447) / cellSize;
+            rectangle[1] = (int) (y1 - 28) / cellSize;
+            rectangle[2] = (int) (x2 - 447) / cellSize;
+            rectangle[3] = (int) (y2 - 28) / cellSize;
+        }
+
+        return rectangle;
+    }
+
+    // Check if any ships are colliding with each other
+    private boolean checkCollision() {
+        for (int i = 0; i < 16; i++) {
+            for (int j = i + 1; j < 16; j++) {
+                if (rectangleShips.get(i).getBoundsInParent().intersects(rectangleShips.get(j).getBoundsInParent())) {
+                    if (rectangleShips.get(i) != rectangleShips.get(j)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Check if all of the ships are on the board
+    private boolean checkShipPlacement(Grid grid)  {
+
+        if (grid == player1Grid) {
+            for (int i = 0; i < 8; i++) {
+
+                if (rectangleShips.get(i).getLayoutY() < 28 || rectangleShips.get(i).getLayoutY() > 328 - rectangleShips.get(i).getHeight()) {
+                    return false;
+                }
+
+                if (rectangleShips.get(i).getLayoutX() < 53 || rectangleShips.get(i).getLayoutX() > 353 - rectangleShips.get(i).getWidth()) {
+                    return false;
+                }
+            }
+        }
+        else {
+            for (int i = 8; i < 16; i++) {
+
+                if (rectangleShips.get(i).getLayoutY() < 28 || rectangleShips.get(i).getLayoutY() > 328 - rectangleShips.get(i).getHeight()) {
+                    return false;
+                }
+
+                if (rectangleShips.get(i).getLayoutX() < 447 || rectangleShips.get(i).getLayoutX() > 747 - rectangleShips.get(i).getWidth()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /////////////////
+    // SET METHODS //
+    /////////////////
+
+    private void setVisiblePlayer1Ships(boolean set) {
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i).setVisible(set);
+        }
+    }
+
+    private void setVisiblePlayer2Ships(boolean set) {
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i+8).setVisible(set);
+        }
+    }
+
+    private void setDisablePlayer1Ships(boolean set) {
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i).setDisable(set);
+        }
+    }
+
+    private void setDisablePlayer2Ships(boolean set) {
+        for (int i = 0; i < 8; i++) {
+            rectangleShips.get(i+8).setDisable(set);
         }
     }
 }

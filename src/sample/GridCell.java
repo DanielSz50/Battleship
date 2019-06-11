@@ -1,6 +1,6 @@
 package sample;
 
-public class GridCell {
+class GridCell {
     private boolean clicked;
     private Ship ship;
 

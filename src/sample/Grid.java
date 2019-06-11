@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
-public class Grid {
+class Grid {
     private GridPane gridPane;
     private ArrayList<ArrayList<GridCell>> gameBoard;
     private ArrayList<Ship> ships;
@@ -19,12 +19,14 @@ public class Grid {
         this.ships = new ArrayList<>();
     }
 
+    // Initialize the grid
     void initGrid() {
         gameOver = false;
         gameBoard.clear();
 
+        ArrayList<GridCell> row;
         for (int i = 0; i < 10; i++) {
-            ArrayList<GridCell> row = new ArrayList(10);
+            row = new ArrayList(10);
             for (int j = 0; j < 10; j++) {
                 row.add(new GridCell());
             }
@@ -35,6 +37,7 @@ public class Grid {
         resetGridPane();
     }
 
+    // Reset the grid
     private void resetGridPane() {
         GridPane gridPane = this.gridPane;
         for (Node node : gridPane.getChildren()) {
@@ -53,22 +56,22 @@ public class Grid {
         }
     }
 
+    // Add ship to the gameBoard
     void addShip(Ship ship) {
         ships.add(ship);
+
         for (int i = ship.getStartX(); i <= ship.getEndX(); i++) {
             for (int j = ship.getStartY(); j <= ship.getEndY(); j++) {
-
-                // TODO: HANDLE ERROR DIFFERENTLY, OKK?
-                if (gameBoard.get(i).get(j).getShip() == null) {
+                try {
                     gameBoard.get(i).get(j).setShip(ship);
-                }
-                else {
-                    System.out.println("okk");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
+    // Check if the game is over
     private boolean gameOver() {
         for(Ship s : ships) {
             if (!s.isDestroyed()) {
@@ -78,6 +81,7 @@ public class Grid {
         return true;
     }
 
+    // Guess the grid cell
     boolean guess(int x, int y) {
         final Color hitSetFill = Color.DARKORCHID;
         final Color missSetFill = Color.DARKGRAY;
@@ -87,44 +91,60 @@ public class Grid {
         Rectangle r = (Rectangle) this.getNode(x, y);
         boolean hit = false;
 
-        if (gameBoard.get(x).get(y).isClicked() == false) {
+        if (!gameBoard.get(x).get(y).isClicked()) {
             if (ship != null) {
                 if (ship.hit()) {
                     for (int i = ship.getStartX(); i <= ship.getEndX(); i++) {
                         for (int j = ship.getStartY(); j <= ship.getEndY(); j++) {
                             r = (Rectangle) this.getNode(i, j);
-                            r.setFill(destroyedSetFill);
+                            if (r != null) {
+                                r.setFill(destroyedSetFill);
+                            }
                         }
                     }
 
                     if (this.gameOver()) {
                         gameOver = true;
                     }
-                } else {
-                    r.setFill(hitSetFill);
+                }
+                else {
+                    if (r != null) {
+                        r.setFill(hitSetFill);
+                    }
+
                     System.out.println("HIT");
                 }
+
                 hit = true;
-            } else {
-                r.setFill(missSetFill);
+            }
+            else {
+                if (r != null) {
+                    r.setFill(missSetFill);
+                }
+
                 System.out.println(":(");
             }
+
             gameBoard.get(x).get(y).setClicked(true);
         }
 
         return hit;
     }
 
-    Node getNode(int col, int row) {
+
+    private Node getNode(int col, int row) {
         GridPane gridPane = this.gridPane;
+
         for (Node node : gridPane.getChildren()) {
             if (node == null) {
                 return null;
             }
+
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
             }
         }
+
         return null;
     }
 
